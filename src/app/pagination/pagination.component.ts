@@ -55,11 +55,13 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
 
   generatePages(initialPage: number) {
-    if (initialPage !== 1) {
-      this.pages = Array(this.rango).fill(0).map((e, i) => i + initialPage );
-    } else {
+    if (initialPage === 1) {
       this.rango = this.totalPages;
-      this.pages = Array(this.rango).fill(0).map((e, i) => i + initialPage );
+      this.pages = Array(this.totalPages).fill(0).map((e, i) => i + initialPage );
+    } else {
+      if (this.rango >= 9 ) {
+        this.pages = Array(this.rango).fill(0).map((e, i) => i + initialPage );
+      }
     }
   }
 
@@ -68,22 +70,17 @@ export class PaginationComponent implements OnInit, OnChanges {
 
   nextPage(event) {
     event.preventDefault();
-    if (this.currentPage === this.totalPages) {
-      return;
-    } else {
+    if (!(this.currentPage === this.totalPages)) {
       if (this.currentPage < this.totalPages) {
         this.currentPage = this.currentPage + 1;
       }
       if (this.currentPage > 5 ) {
         this.initialPage = this.initialPage + 1;
         this.rango = this.rango - 1;
-        if (this.rango < 9 ) {
-          return;
-        } else {
-          this.generatePages(this.initialPage);
-        }
+        this.generatePages(this.initialPage);
       }
     }
+    this.pageChange.emit(this.currentPage);
   }
 
   previousPage(event) {
@@ -93,19 +90,15 @@ export class PaginationComponent implements OnInit, OnChanges {
       if (this.currentPage >= 5) {
         this.initialPage = this.initialPage - 1;
         this.rango = this.rango + 1;
-        if (this.rango <= 9 ) {
-        return;
-        } else {
-          this.generatePages(this.initialPage);
-        }
+        this.generatePages(this.initialPage);
       }
-    } else {
-      return;
     }
+    this.pageChange.emit(this.currentPage);
   }
 
 
   selectPage(page: number ) {
-
+    this.currentPage = page;
+    
   }
 }
