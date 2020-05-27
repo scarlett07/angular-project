@@ -1,0 +1,15 @@
+<ul class="pagination"
+[ngClass]="{ 'alignment-right': alignment === 'right', 'alignment-left': alignment === 'left' }"
+>
+  <div [class.disabled]="currentPage == 1">
+    <a (click)="previousPage($event)" href="javascript:void(0)" >&lsaquo;</a>
+  </div>
+  <div class="page" *ngFor="let page of pages | slice:0:9 " [class.active]="page == currentPage">
+    <a href="">
+      {{page}}
+    </a>
+  </div>
+  <div [class.disabled] = "currentPage == totalPages" >
+    <a (click)="nextPage($event)" href="javascript:void(0)" >&rsaquo;</a>
+  </div>
+</ul>
