@@ -5,7 +5,7 @@ import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angu
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })
-export class PaginationComponent implements OnInit, OnChanges {
+export class PaginationComponent implements OnInit {
 
   /**
    * The total amount of items within the collection
@@ -28,11 +28,6 @@ export class PaginationComponent implements OnInit, OnChanges {
   currentPage = 1;
 
   /**
-   * dezplazamiento para cuando seleccionen un numero en particular
-   */
-  offset: number;
-
-  /**
    * the max number of page links to display in the pagination
    */
   rango: number;
@@ -42,63 +37,35 @@ export class PaginationComponent implements OnInit, OnChanges {
    */
   pages: Array<any>;
 
-  /**
-   *
-   */
-  initialPage = 1;
 
+
+  inicio: number;
+  fin: number;
 
   constructor() { }
 
   ngOnInit() {
-    this.generatePages(this.initialPage);
+    this.inicio = 0;
+    this.fin = 9;
+    this.pages = Array(this.totalPages).fill(0).map((e, i) => i + 1 );
   }
-
-  generatePages(initialPage: number) {
-    if (initialPage === 1) {
-      this.rango = this.totalPages;
-      this.pages = Array(this.totalPages).fill(0).map((e, i) => i + initialPage );
-    } else {
-      if (this.rango >= 9 ) {
-        this.pages = Array(this.rango).fill(0).map((e, i) => i + initialPage );
-      }
-    }
-  }
-
-  ngOnChanges() {
-  }
-
-  nextPage(event) {
-    event.preventDefault();
-    if (!(this.currentPage === this.totalPages)) {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage = this.currentPage + 1;
-      }
-      if (this.currentPage > 5 ) {
-        this.initialPage = this.initialPage + 1;
-        this.rango = this.rango - 1;
-        this.generatePages(this.initialPage);
-      }
-    }
-    this.pageChange.emit(this.currentPage);
-  }
-
-  previousPage(event) {
-    event.preventDefault();
-    if (this.currentPage > 1 ) {
-      this.currentPage = this.currentPage - 1;
-      if (this.currentPage >= 5) {
-        this.initialPage = this.initialPage - 1;
-        this.rango = this.rango + 1;
-        this.generatePages(this.initialPage);
-      }
-    }
-    this.pageChange.emit(this.currentPage);
-  }
-
 
   selectPage(page: number ) {
+    event.preventDefault();
     this.currentPage = page;
-    
+    this.pageChange.emit(this.currentPage);
+    if (this.totalPages > 9 ) {
+      if ( this.currentPage <= 5 ) {
+        this.inicio = 0;
+        this.fin = 9;
+      } else if ((this.totalPages - this.currentPage) < 5) {
+        this.inicio = this.totalPages - 9;
+        this.fin = this.totalPages;
+      } else {
+        this.inicio = this.currentPage - 5;
+        this.fin = this.currentPage + 4;
+      }
+    }
+    console.log(page);
   }
 }

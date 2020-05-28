@@ -1,15 +1,21 @@
 <ul class="pagination"
 [ngClass]="{ 'alignment-right': alignment === 'right', 'alignment-left': alignment === 'left' }"
 >
-  <div>
-    <a (click)="previousPage($event)" href="javascript:void(0)" >&lsaquo;</a>
+  <div *ngIf="currentPage > 1">
+    <a (click)="selectPage(currentPage -1)" href="javascript:void(0)" >&lsaquo;</a>
   </div>
-  <div class="page" *ngFor="let page of pages | slice:0:9 " [class.active]="page == currentPage">
+  <div *ngIf="currentPage == 1">
+    <a class="disabled" >&lsaquo;</a>
+  </div>
+  <div class="page" *ngFor="let page of pages | slice:inicio:fin " [class.active]="page == currentPage">
     <a (click)= "selectPage(page)" href="">
       {{page}}
     </a>
   </div>
-  <div>
-    <a (click)="nextPage($event)" href="javascript:void(0)" >&rsaquo;</a>
+  <div *ngIf="currentPage < totalPages">
+    <a (click)="selectPage(currentPage + 1)" href="javascript:void(0)" >&rsaquo;</a>
+  </div>
+  <div *ngIf="currentPage == totalPages">
+    <a class="disabled" >&rsaquo;</a>
   </div>
 </ul>
