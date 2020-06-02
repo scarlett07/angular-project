@@ -18,7 +18,7 @@ export class PaginationComponent implements OnInit {
   @Input() alignment: string;
 
   /**
-   *
+   * Send to page selected
    */
   @Output() pageChange: EventEmitter<number> = new EventEmitter<number>();
 
@@ -26,11 +26,6 @@ export class PaginationComponent implements OnInit {
    * pagina activa
    */
   currentPage = 1;
-
-  /**
-   * the max number of page links to display in the pagination
-   */
-  rango: number;
 
   /**
    *
